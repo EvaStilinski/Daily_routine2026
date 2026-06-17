@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rutina diaria · 每日日程</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16212B; --panel:#1E2B36; --line:#32424F; --grid:rgba(143,160,172,.06);
+    --amber:#E8A33D; --paper:#F2ECDF; --mute:#8FA0AC;
+    --font-display:'Manrope','PingFang SC','Microsoft YaHei',system-ui,sans-serif;
+    --font-mono:'JetBrains Mono','SFMono-Regular',Consolas,monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:var(--font-display); background-color:var(--ink);
+    background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:32px 32px; color:var(--paper); min-height:100vh;
+    display:flex; align-items:center; justify-content:center; padding:24px;
+  }
+  .wrap{max-width:480px; width:100%; text-align:center;}
+  .eyebrow{font-family:var(--font-mono); font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--amber); margin-bottom:14px;}
+  h1{font-size:clamp(1.5rem,5vw,2rem); font-weight:800; margin:0 0 8px;}
+  .sub{font-family:var(--font-mono); font-size:.8rem; color:var(--mute); margin-bottom:32px;}
+  .choices{display:flex; flex-direction:column; gap:14px;}
+  .choice{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    background:var(--panel); border:1px solid var(--line); border-radius:12px;
+    padding:20px 22px; text-decoration:none; color:var(--paper); transition:border-color .2s;
+  }
+  .choice:hover{border-color:var(--amber);}
+  .choice:focus-visible{outline:2px solid var(--amber); outline-offset:3px;}
+  .choice .lang{font-size:1.15rem; font-weight:700;}
+  .choice .hint{font-family:var(--font-mono); font-size:.75rem; color:var(--mute);}
+  .choice .arrow{font-family:var(--font-mono); color:var(--amber); font-size:1.2rem;}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="eyebrow">Panel de control · 控制面板</div>
+    <h1>Rutina diaria / 每日日程</h1>
+    <div class="sub">Elige idioma · 选择语言</div>
+    <div class="choices">
+      <a class="choice" href="rutina-diaria.html">
+        <span><span class="lang">Español</span><br><span class="hint">Rutina + temporizador + tips</span></span>
+        <span class="arrow">&#8594;</span>
+      </a>
+      <a class="choice" href="rutina-diaria-zh.html">
+        <span><span class="lang">中文</span><br><span class="hint">日程 + 专注计时器 + 防拖延技巧</span></span>
+        <span class="arrow">&#8594;</span>
+      </a>
+    </div>
+  </div>
+</body>
+</html>
