@@ -9,74 +9,50 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#16212B;
-    --panel:#1E2B36;
-    --line:#32424F;
-    --grid:rgba(143,160,172,.06);
-    --amber:#E8A33D;
-    --teal:#5FB8A8;
-    --clay:#C97B63;
-    --sage:#8FBF7F;
-    --paper:#F2ECDF;
-    --mute:#8FA0AC;
+    --ink:#16212B; --panel:#1E2B36; --line:#32424F; --grid:rgba(143,160,172,.06);
+    --amber:#E8A33D; --teal:#5FB8A8; --clay:#C97B63; --sage:#8FBF7F;
+    --paper:#F2ECDF; --mute:#8FA0AC;
     --font-display:'Manrope', system-ui, sans-serif;
     --font-mono:'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
-    font-family:var(--font-display);
-    background-color:var(--ink);
-    background-image:
-      linear-gradient(var(--grid) 1px, transparent 1px),
-      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-    background-size:32px 32px;
-    color:var(--paper);
-    min-height:100vh;
-    padding:32px 16px 60px;
+    font-family:var(--font-display); background-color:var(--ink);
+    background-image:linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size:32px 32px; color:var(--paper); min-height:100vh; padding:32px 16px 60px;
   }
   .wrap{max-width:720px;margin:0 auto;}
+  .topnav{display:flex; gap:14px; margin-bottom:18px; font-family:var(--font-mono); font-size:.75rem;}
+  .topnav a{color:var(--mute); text-decoration:none; border-bottom:1px solid transparent;}
+  .topnav a:hover{color:var(--paper); border-bottom-color:var(--amber);}
+  .topnav a.current{color:var(--amber);}
 
   header{margin-bottom:26px;}
-  .eyebrow{
-    font-family:var(--font-mono); font-size:.72rem; letter-spacing:.14em;
-    text-transform:uppercase; color:var(--amber); margin-bottom:10px;
-  }
+  .eyebrow{font-family:var(--font-mono); font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--amber); margin-bottom:10px;}
   h1{font-size:clamp(1.6rem,4.5vw,2.2rem); font-weight:800; margin:0 0 12px; letter-spacing:-.01em;}
   .header-meta{display:flex; gap:16px; flex-wrap:wrap; font-family:var(--font-mono); font-size:.8rem; color:var(--mute);}
   .header-meta .streak{color:var(--amber);}
 
   .tabs{display:flex; gap:6px; margin-bottom:22px; border-bottom:1px solid var(--line);}
-  .tab{
-    background:none; border:none; color:var(--mute); font-family:var(--font-mono);
-    font-size:.74rem; letter-spacing:.06em; text-transform:uppercase;
-    padding:10px 6px; cursor:pointer; border-bottom:2px solid transparent;
-  }
+  .tab{background:none; border:none; color:var(--mute); font-family:var(--font-mono); font-size:.74rem; letter-spacing:.06em; text-transform:uppercase; padding:10px 6px; cursor:pointer; border-bottom:2px solid transparent;}
   .tab.active{color:var(--paper); border-bottom-color:var(--amber);}
   .tab:hover{color:var(--paper);}
-  .tab:focus-visible, button:focus-visible, [contenteditable]:focus-visible{
-    outline:2px solid var(--amber); outline-offset:2px;
-  }
+  .tab:focus-visible, button:focus-visible, [contenteditable]:focus-visible{outline:2px solid var(--amber); outline-offset:2px;}
 
   .panel{display:none;}
   .panel.active{display:block;}
 
   .mode-toggle{display:flex; align-items:center; gap:8px; margin-bottom:18px; font-family:var(--font-mono); font-size:.76rem; flex-wrap:wrap;}
   .mode-label{color:var(--mute);}
-  .mode-btn{
-    background:var(--panel); border:1px solid var(--line); color:var(--mute);
-    padding:7px 14px; border-radius:8px; cursor:pointer; font-family:var(--font-mono); font-size:.76rem;
-  }
+  .mode-btn{background:var(--panel); border:1px solid var(--line); color:var(--mute); padding:7px 14px; border-radius:8px; cursor:pointer; font-family:var(--font-mono); font-size:.76rem;}
   .mode-btn.active{background:var(--sage); color:var(--ink); border-color:var(--sage); font-weight:700;}
   .mode-btn:hover{border-color:var(--sage);}
 
   .panel-head{display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:16px;}
   .progress-summary{font-family:var(--font-mono); font-size:.85rem; color:var(--mute);}
   #progressCount{color:var(--paper); font-weight:700;}
-  .ghost-btn{
-    background:none; border:none; color:var(--mute); font-family:var(--font-mono);
-    font-size:.7rem; text-decoration:underline; cursor:pointer; padding:0;
-  }
+  .ghost-btn{background:none; border:none; color:var(--mute); font-family:var(--font-mono); font-size:.7rem; text-decoration:underline; cursor:pointer; padding:0;}
   .ghost-btn:hover{color:var(--paper);}
 
   ol.timeline{list-style:none; margin:0; padding:0;}
@@ -86,19 +62,9 @@
   .conn-line{flex:1; width:2px; background:var(--line); margin-top:4px;}
   .node.time-past .dot{background:var(--teal); border-color:var(--teal);}
   .node.time-past .conn-line{background:var(--teal);}
-  .node.time-current .dot{
-    background:var(--amber); border-color:var(--amber);
-    animation:pulse 1.8s infinite;
-  }
-  @keyframes pulse{
-    0%{box-shadow:0 0 0 0 rgba(232,163,61,.55);}
-    70%{box-shadow:0 0 0 8px rgba(232,163,61,0);}
-    100%{box-shadow:0 0 0 0 rgba(232,163,61,0);}
-  }
-  @media (prefers-reduced-motion: reduce){
-    .node.time-current .dot{animation:none;}
-    .dial-progress{transition:none;}
-  }
+  .node.time-current .dot{background:var(--amber); border-color:var(--amber); animation:pulse 1.8s infinite;}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(232,163,61,.55);}70%{box-shadow:0 0 0 8px rgba(232,163,61,0);}100%{box-shadow:0 0 0 0 rgba(232,163,61,0);}}
+  @media (prefers-reduced-motion: reduce){.node.time-current .dot{animation:none;} .dial-progress{transition:none;}}
 
   .card{flex:1; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:13px 16px; min-width:0;}
   .card-top{display:flex; align-items:center; gap:10px; margin-bottom:6px; flex-wrap:wrap;}
@@ -119,20 +85,12 @@
   .timer-wrap{position:relative; width:220px; height:220px; margin:24px auto 8px;}
   .dial{width:100%; height:100%;}
   .dial-track{fill:none; stroke:var(--line); stroke-width:10;}
-  .dial-progress{
-    fill:none; stroke:var(--amber); stroke-width:10; stroke-linecap:round;
-    stroke-dasharray:565.49; transform:rotate(-90deg); transform-origin:100px 100px;
-    transition:stroke-dashoffset .3s linear, stroke .3s;
-  }
+  .dial-progress{fill:none; stroke:var(--amber); stroke-width:10; stroke-linecap:round; stroke-dasharray:565.49; transform:rotate(-90deg); transform-origin:100px 100px; transition:stroke-dashoffset .3s linear, stroke .3s;}
   .timer-center{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;}
   .timer-mode{font-family:var(--font-mono); font-size:.7rem; letter-spacing:.12em; color:var(--mute); margin-bottom:8px;}
   .timer-display{font-family:var(--font-mono); font-size:2.3rem; font-weight:700; color:var(--paper);}
   .timer-controls{display:flex; gap:10px; justify-content:center; margin-top:6px;}
-  .btn{
-    font-family:var(--font-mono); font-size:.78rem; letter-spacing:.04em; text-transform:uppercase;
-    background:var(--panel); color:var(--paper); border:1px solid var(--line); border-radius:8px;
-    padding:10px 20px; cursor:pointer;
-  }
+  .btn{font-family:var(--font-mono); font-size:.78rem; letter-spacing:.04em; text-transform:uppercase; background:var(--panel); color:var(--paper); border:1px solid var(--line); border-radius:8px; padding:10px 20px; cursor:pointer;}
   .btn.primary{background:var(--amber); color:var(--ink); border-color:var(--amber); font-weight:700;}
   .btn:hover{border-color:var(--amber);}
   .cycle-dots{display:flex; gap:8px; justify-content:center; margin-top:20px;}
@@ -150,6 +108,12 @@
 </head>
 <body>
 <div class="wrap">
+  <nav class="topnav">
+    <a href="index.html">Inicio</a>
+    <a href="rutina-diaria.html" class="current">Rutina · ES</a>
+    <a href="rutina-diaria-zh.html">日程 · 中文</a>
+    <a href="metas.html">Metas diarias</a>
+  </nav>
 
   <header>
     <div class="eyebrow">Panel de control · tu día</div>
@@ -200,30 +164,12 @@
 
   <section class="panel" id="panel-tips">
     <div class="tips-grid">
-      <div class="tip-card">
-        <div class="tip-eyebrow">Regla de los 2 minutos</div>
-        <p>Si algo toma menos de 2 minutos (responder un mensaje, guardar un archivo), hazlo ahora mismo en vez de agendarlo. Agendar tareas pequeñas cuesta más esfuerzo mental que solo hacerlas.</p>
-      </div>
-      <div class="tip-card">
-        <div class="tip-eyebrow">Arranque de 5 minutos</div>
-        <p>Cuando algo te dé pereza, comprométete solo a 5 minutos. La resistencia casi siempre baja después de empezar, no antes.</p>
-      </div>
-      <div class="tip-card">
-        <div class="tip-eyebrow">Modo avión en bloques profundos</div>
-        <p>Antes de un bloque de trabajo profundo, pon el teléfono en otro cuarto o en modo avión. Las notificaciones son la causa número uno de perder el hilo a media tarea.</p>
-      </div>
-      <div class="tip-card">
-        <div class="tip-eyebrow">El siguiente paso físico</div>
-        <p>Si no sabes por dónde empezar, anota la primera acción física y concreta ("abrir el archivo de n8n"), no la meta general ("avanzar el proyecto"). La vaguedad alimenta la procrastinación.</p>
-      </div>
-      <div class="tip-card">
-        <div class="tip-eyebrow">Apilar hábitos</div>
-        <p>Une un hábito nuevo a uno que ya haces sin pensar, por ejemplo: "después del café, reviso mis 3 prioridades del día" en la pestaña Rutina.</p>
-      </div>
-      <div class="tip-card">
-        <div class="tip-eyebrow">Cierra el círculo</div>
-        <p>Al final de cada bloque, escribe una línea de dónde te quedaste. Retomar después de una distracción cuesta más cuando no sabes por dónde seguir.</p>
-      </div>
+      <div class="tip-card"><div class="tip-eyebrow">Regla de los 2 minutos</div><p>Si algo toma menos de 2 minutos, hazlo ahora mismo en vez de agendarlo. Agendar tareas pequeñas cuesta más esfuerzo mental que solo hacerlas.</p></div>
+      <div class="tip-card"><div class="tip-eyebrow">Arranque de 5 minutos</div><p>Cuando algo te dé pereza, comprométete solo a 5 minutos. La resistencia casi siempre baja después de empezar, no antes.</p></div>
+      <div class="tip-card"><div class="tip-eyebrow">Modo avión en bloques profundos</div><p>Antes de un bloque de trabajo profundo, pon el teléfono en otro cuarto o en modo avión. Las notificaciones son la causa número uno de perder el hilo.</p></div>
+      <div class="tip-card"><div class="tip-eyebrow">El siguiente paso físico</div><p>Si no sabes por dónde empezar, anota la primera acción física y concreta, no la meta general. La vaguedad alimenta la procrastinación.</p></div>
+      <div class="tip-card"><div class="tip-eyebrow">Apilar hábitos</div><p>Une un hábito nuevo a uno que ya haces sin pensar, por ejemplo: "después del café, reviso mis 3 prioridades del día".</p></div>
+      <div class="tip-card"><div class="tip-eyebrow">Cierra el círculo</div><p>Al final de cada bloque, escribe una línea de dónde te quedaste. Retomar después de una distracción cuesta más sin eso.</p></div>
     </div>
   </section>
 
@@ -231,121 +177,104 @@
 </div>
 
 <script>
+  const STORAGE_PREFIX = 'es-';
   const TYPE_LABEL = {deep:'Profundo', study:'Estudio', hobby:'Libre', admin:'Gestión', health:'Salud', rest:'Descanso'};
 
   const DEFAULT_ITEMS_AM = [
-    {id:'wake',      start:'06:30', end:'07:00', title:'Despertar + hidratarse (sin pantalla)', type:'rest'},
+    {id:'wake', start:'06:30', end:'07:00', title:'Despertar + hidratarse (sin pantalla)', type:'rest'},
     {id:'breakfast', start:'07:00', end:'07:30', title:'Desayuno', type:'rest'},
-    {id:'plan',      start:'07:30', end:'08:00', title:'Planear el día: 3 prioridades', type:'admin'},
-    {id:'gym',       start:'08:00', end:'10:00', title:'Gym: entrenamiento de fuerza (cámbialo por una corrida en días ligeros)', type:'health'},
-    {id:'recovery',  start:'10:00', end:'10:30', title:'Ducha + comida post-entreno', type:'health'},
-    {id:'deep1',     start:'10:30', end:'12:30', title:'Bloque profundo: cliente o automatización (n8n)', type:'deep'},
-    {id:'lunch',     start:'12:30', end:'13:30', title:'Comida', type:'rest'},
-    {id:'jobs',      start:'13:30', end:'14:15', title:'Aplicar a trabajos / búsqueda de empleo', type:'admin'},
-    {id:'mandarin',  start:'14:15', end:'15:00', title:'Mandarín: gramática + Anki + shadowing', type:'study'},
-    {id:'break1',    start:'15:00', end:'15:15', title:'Descanso', type:'rest'},
-    {id:'deep2',     start:'15:15', end:'16:30', title:'Bloque profundo: diseño / reporte Kingala', type:'deep'},
-    {id:'wrapup',    start:'16:30', end:'17:00', title:'Cierre: revisar avances y planear mañana', type:'admin'},
-    {id:'creative',  start:'17:00', end:'18:00', title:'Tiempo creativo: arte o proyecto VR', type:'hobby'},
-    {id:'dinner',    start:'18:00', end:'18:45', title:'Cena', type:'rest'},
-    {id:'freetime',  start:'18:45', end:'20:15', title:'Tiempo libre: voice acting / VRChat / dorama', type:'hobby'},
-    {id:'winddown',  start:'22:00', end:'22:15', title:'Pantallas fuera del cuarto', type:'rest'}
+    {id:'plan', start:'07:30', end:'08:00', title:'Planear el día: 3 prioridades', type:'admin'},
+    {id:'gym', start:'08:00', end:'10:00', title:'Gym: entrenamiento de fuerza (cámbialo por una corrida en días ligeros)', type:'health'},
+    {id:'recovery', start:'10:00', end:'10:30', title:'Ducha + comida post-entreno', type:'health'},
+    {id:'deep1', start:'10:30', end:'12:30', title:'Bloque profundo: cliente o automatización (n8n)', type:'deep'},
+    {id:'lunch', start:'12:30', end:'13:30', title:'Comida', type:'rest'},
+    {id:'jobs', start:'13:30', end:'14:15', title:'Aplicar a trabajos / búsqueda de empleo', type:'admin'},
+    {id:'mandarin', start:'14:15', end:'15:00', title:'Mandarín: gramática + Anki + shadowing', type:'study'},
+    {id:'break1', start:'15:00', end:'15:15', title:'Descanso', type:'rest'},
+    {id:'deep2', start:'15:15', end:'16:30', title:'Bloque profundo: diseño / reporte Kingala', type:'deep'},
+    {id:'wrapup', start:'16:30', end:'17:00', title:'Cierre: revisar avances y planear mañana', type:'admin'},
+    {id:'creative', start:'17:00', end:'18:00', title:'Tiempo creativo: arte o proyecto VR', type:'hobby'},
+    {id:'dinner', start:'18:00', end:'18:45', title:'Cena', type:'rest'},
+    {id:'freetime', start:'18:45', end:'20:15', title:'Tiempo libre: voice acting / VRChat / dorama', type:'hobby'},
+    {id:'winddown', start:'22:00', end:'22:15', title:'Pantallas fuera del cuarto', type:'rest'}
   ];
-
   const DEFAULT_ITEMS_PM = [
-    {id:'wake',      start:'06:30', end:'07:00', title:'Despertar + hidratarse (sin pantalla)', type:'rest'},
+    {id:'wake', start:'06:30', end:'07:00', title:'Despertar + hidratarse (sin pantalla)', type:'rest'},
     {id:'breakfast', start:'07:00', end:'07:30', title:'Desayuno', type:'rest'},
-    {id:'plan',      start:'07:30', end:'08:00', title:'Planear el día: 3 prioridades', type:'admin'},
-    {id:'deep1',     start:'08:00', end:'10:00', title:'Bloque profundo: cliente o automatización (n8n)', type:'deep'},
-    {id:'break1',    start:'10:00', end:'10:15', title:'Descanso', type:'rest'},
-    {id:'deep2',     start:'10:15', end:'12:00', title:'Bloque profundo: diseño / reporte Kingala', type:'deep'},
-    {id:'lunch',     start:'12:00', end:'13:00', title:'Comida', type:'rest'},
-    {id:'jobs',      start:'13:00', end:'13:45', title:'Aplicar a trabajos / búsqueda de empleo', type:'admin'},
-    {id:'mandarin',  start:'13:45', end:'14:30', title:'Mandarín: gramática + Anki + shadowing', type:'study'},
-    {id:'creative',  start:'14:30', end:'15:30', title:'Tiempo creativo: arte o proyecto VR', type:'hobby'},
-    {id:'wrapup',    start:'15:30', end:'16:00', title:'Cierre: revisar avances y planear mañana', type:'admin'},
-    {id:'snack',     start:'16:00', end:'16:30', title:'Snack pre-entreno', type:'health'},
-    {id:'gym',       start:'17:00', end:'19:00', title:'Gym: entrenamiento de fuerza (cámbialo por una corrida en días ligeros)', type:'health'},
-    {id:'dinner',    start:'19:00', end:'19:45', title:'Cena (post-entreno)', type:'rest'},
-    {id:'freetime',  start:'19:45', end:'21:00', title:'Tiempo libre: voice acting / VRChat / dorama', type:'hobby'},
-    {id:'winddown',  start:'22:00', end:'22:15', title:'Pantallas fuera del cuarto', type:'rest'}
+    {id:'plan', start:'07:30', end:'08:00', title:'Planear el día: 3 prioridades', type:'admin'},
+    {id:'deep1', start:'08:00', end:'10:00', title:'Bloque profundo: cliente o automatización (n8n)', type:'deep'},
+    {id:'break1', start:'10:00', end:'10:15', title:'Descanso', type:'rest'},
+    {id:'deep2', start:'10:15', end:'12:00', title:'Bloque profundo: diseño / reporte Kingala', type:'deep'},
+    {id:'lunch', start:'12:00', end:'13:00', title:'Comida', type:'rest'},
+    {id:'jobs', start:'13:00', end:'13:45', title:'Aplicar a trabajos / búsqueda de empleo', type:'admin'},
+    {id:'mandarin', start:'13:45', end:'14:30', title:'Mandarín: gramática + Anki + shadowing', type:'study'},
+    {id:'creative', start:'14:30', end:'15:30', title:'Tiempo creativo: arte o proyecto VR', type:'hobby'},
+    {id:'wrapup', start:'15:30', end:'16:00', title:'Cierre: revisar avances y planear mañana', type:'admin'},
+    {id:'snack', start:'16:00', end:'16:30', title:'Snack pre-entreno', type:'health'},
+    {id:'gym', start:'17:00', end:'19:00', title:'Gym: entrenamiento de fuerza (cámbialo por una corrida en días ligeros)', type:'health'},
+    {id:'dinner', start:'19:00', end:'19:45', title:'Cena (post-entreno)', type:'rest'},
+    {id:'freetime', start:'19:45', end:'21:00', title:'Tiempo libre: voice acting / VRChat / dorama', type:'hobby'},
+    {id:'winddown', start:'22:00', end:'22:15', title:'Pantallas fuera del cuarto', type:'rest'}
   ];
 
   let currentMode = 'am';
   let items = [];
   let progress = {date:'', completed:{}, streak:{current:0, best:0}};
 
-  function defaultsFor(mode){
-    return (mode === 'pm' ? DEFAULT_ITEMS_PM : DEFAULT_ITEMS_AM).map(i=>({...i}));
-  }
-  function escapeHtml(str){
-    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
-  function todayStr(){
-    const d = new Date();
-    return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-  }
-  function diffDays(a,b){
-    const da=new Date(a+'T00:00:00'), db=new Date(b+'T00:00:00');
-    return Math.round((db-da)/86400000);
-  }
+  function defaultsFor(mode){ return (mode === 'pm' ? DEFAULT_ITEMS_PM : DEFAULT_ITEMS_AM).map(i=>({...i})); }
+  function escapeHtml(str){ return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function todayStr(){ const d = new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+  function diffDays(a,b){ const da=new Date(a+'T00:00:00'), db=new Date(b+'T00:00:00'); return Math.round((db-da)/86400000); }
 
-  async function loadMode(){
+  function loadMode(){
     try{
-      const res = await window.storage.get('routine-mode', false);
-      if(res && res.value && (res.value === 'am' || res.value === 'pm')) currentMode = res.value;
-    }catch(e){ /* sin preferencia guardada, usa 'am' por defecto */ }
+      const v = localStorage.getItem(STORAGE_PREFIX + 'routine-mode');
+      if(v === 'am' || v === 'pm') currentMode = v;
+    }catch(e){ /* sin preferencia guardada o localStorage no disponible */ }
   }
-  async function saveMode(){
-    try{ await window.storage.set('routine-mode', currentMode, false); }
+  function saveMode(){
+    try{ localStorage.setItem(STORAGE_PREFIX + 'routine-mode', currentMode); }
     catch(e){ console.error('No se pudo guardar el modo', e); }
   }
-
-  async function loadItems(){
+  function loadItems(){
     try{
-      const res = await window.storage.get('routine-items-' + currentMode, false);
-      if(res && res.value){ items = JSON.parse(res.value); return; }
-    }catch(e){ /* no hay datos guardados aún para este modo */ }
+      const v = localStorage.getItem(STORAGE_PREFIX + 'routine-items-' + currentMode);
+      if(v){ items = JSON.parse(v); return; }
+    }catch(e){ /* no hay datos guardados aún */ }
     items = defaultsFor(currentMode);
     saveItems();
   }
-  async function saveItems(){
-    try{ await window.storage.set('routine-items-' + currentMode, JSON.stringify(items), false); }
+  function saveItems(){
+    try{ localStorage.setItem(STORAGE_PREFIX + 'routine-items-' + currentMode, JSON.stringify(items)); }
     catch(e){ console.error('No se pudo guardar la rutina', e); }
   }
-
-  async function loadProgress(){
+  function loadProgress(){
     const today = todayStr();
     let old = null;
     try{
-      const res = await window.storage.get('daily-progress', false);
-      if(res && res.value) old = JSON.parse(res.value);
+      const v = localStorage.getItem(STORAGE_PREFIX + 'daily-progress');
+      if(v) old = JSON.parse(v);
     }catch(e){ old = null; }
-
     if(old && old.date === today){
       progress = old;
       if(!progress.streak) progress.streak = {current:0, best:0};
       return;
     }
-
     let streak = (old && old.streak) ? old.streak : {current:0, best:0};
     if(old){
       const doneCount = Object.values(old.completed || {}).filter(Boolean).length;
       const total = items.length || 1;
       const ratio = doneCount / total;
       const gap = diffDays(old.date, today);
-      if(gap === 1 && ratio >= 0.7){
-        streak.current = (streak.current || 0) + 1;
-      } else {
-        streak.current = 0;
-      }
+      if(gap === 1 && ratio >= 0.7) streak.current = (streak.current || 0) + 1;
+      else streak.current = 0;
       if(streak.current > (streak.best || 0)) streak.best = streak.current;
     }
     progress = {date: today, completed:{}, streak};
-    await saveProgress();
+    saveProgress();
   }
-  async function saveProgress(){
-    try{ await window.storage.set('daily-progress', JSON.stringify(progress), false); }
+  function saveProgress(){
+    try{ localStorage.setItem(STORAGE_PREFIX + 'daily-progress', JSON.stringify(progress)); }
     catch(e){ console.error('No se pudo guardar el progreso', e); }
   }
 
@@ -355,18 +284,15 @@
     document.getElementById('todayLabel').textContent = label.charAt(0).toUpperCase() + label.slice(1);
     document.getElementById('streakBadge').textContent = 'Racha: ' + (progress.streak.current || 0) + ' días';
   }
-
   function updateProgressSummary(){
     const done = Object.values(progress.completed).filter(Boolean).length;
     document.getElementById('progressCount').textContent = done + '/' + items.length;
   }
-
   function renderTimeline(){
     const tl = document.getElementById('timeline');
     tl.innerHTML = '';
     const now = new Date();
     const nowMin = now.getHours()*60 + now.getMinutes();
-
     items.forEach((item, idx)=>{
       const [sh,sm] = item.start.split(':').map(Number);
       const [eh,em] = item.end.split(':').map(Number);
@@ -375,58 +301,39 @@
       if(nowMin >= endMin) timeStatus = 'past';
       else if(nowMin >= startMin && nowMin < endMin) timeStatus = 'current';
       const done = !!progress.completed[item.id];
-
       const li = document.createElement('li');
       li.className = 'node type-' + item.type + ' time-' + timeStatus + (done ? ' done' : '');
       li.innerHTML =
-        '<div class="connector">' +
-          '<span class="dot"></span>' +
-          (idx < items.length-1 ? '<span class="conn-line"></span>' : '') +
-        '</div>' +
-        '<div class="card">' +
-          '<div class="card-top">' +
-            '<span class="time-range">' + item.start + '–' + item.end + '</span>' +
-            '<span class="pill">' + TYPE_LABEL[item.type] + '</span>' +
-            (timeStatus==='current' ? '<span class="now-flag">AHORA</span>' : '') +
-          '</div>' +
-          '<div class="card-title" contenteditable="true" spellcheck="false" data-id="' + item.id + '">' + escapeHtml(item.title) + '</div>' +
-          '<label class="check">' +
-            '<input type="checkbox" data-id="' + item.id + '" ' + (done ? 'checked' : '') + '>' +
-            '<span>Completado</span>' +
-          '</label>' +
-        '</div>';
+        '<div class="connector"><span class="dot"></span>' + (idx < items.length-1 ? '<span class="conn-line"></span>' : '') + '</div>' +
+        '<div class="card"><div class="card-top"><span class="time-range">' + item.start + '–' + item.end + '</span>' +
+        '<span class="pill">' + TYPE_LABEL[item.type] + '</span>' +
+        (timeStatus==='current' ? '<span class="now-flag">AHORA</span>' : '') + '</div>' +
+        '<div class="card-title" contenteditable="true" spellcheck="false" data-id="' + item.id + '">' + escapeHtml(item.title) + '</div>' +
+        '<label class="check"><input type="checkbox" data-id="' + item.id + '" ' + (done ? 'checked' : '') + '><span>Completado</span></label></div>';
       tl.appendChild(li);
     });
-
     tl.querySelectorAll('.card-title').forEach(el=>{
       el.addEventListener('blur', onTitleBlur);
       el.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); e.target.blur(); } });
     });
-    tl.querySelectorAll('.check input').forEach(el=>{
-      el.addEventListener('change', onCheckChange);
-    });
-
+    tl.querySelectorAll('.check input').forEach(el=>{ el.addEventListener('change', onCheckChange); });
     updateProgressSummary();
   }
-
-  async function onTitleBlur(e){
+  function onTitleBlur(e){
     const id = e.target.dataset.id;
     const newTitle = e.target.textContent.trim() || '(sin título)';
     const item = items.find(i=>i.id===id);
-    if(item && item.title !== newTitle){
-      item.title = newTitle;
-      await saveItems();
-    }
+    if(item && item.title !== newTitle){ item.title = newTitle; saveItems(); }
   }
-  async function onCheckChange(e){
+  function onCheckChange(e){
     const id = e.target.dataset.id;
     progress.completed[id] = e.target.checked;
-    await saveProgress();
+    saveProgress();
     renderTimeline();
   }
 
   let resetArmed = false;
-  document.getElementById('btnResetRoutine').addEventListener('click', async ()=>{
+  document.getElementById('btnResetRoutine').addEventListener('click', ()=>{
     const btn = document.getElementById('btnResetRoutine');
     if(!resetArmed){
       resetArmed = true;
@@ -434,7 +341,7 @@
       setTimeout(()=>{ resetArmed = false; btn.textContent = 'Restablecer rutina'; }, 3000);
     } else {
       items = defaultsFor(currentMode);
-      await saveItems();
+      saveItems();
       renderTimeline();
       resetArmed = false;
       btn.textContent = 'Restablecer rutina';
@@ -451,17 +358,16 @@
       });
     });
   }
-
   function setupModeToggle(){
     const buttons = document.querySelectorAll('.mode-btn');
     buttons.forEach(btn=>{
       if(btn.dataset.mode === currentMode) btn.classList.add('active'); else btn.classList.remove('active');
-      btn.addEventListener('click', async ()=>{
+      btn.addEventListener('click', ()=>{
         if(btn.dataset.mode === currentMode) return;
         currentMode = btn.dataset.mode;
         buttons.forEach(b=>b.classList.toggle('active', b.dataset.mode === currentMode));
-        await saveMode();
-        await loadItems();
+        saveMode();
+        loadItems();
         renderTimeline();
       });
     });
@@ -497,47 +403,36 @@
     if(timer.mode === 'focus'){
       timer.cyclesDone++;
       timer.mode = (timer.cyclesDone % 4 === 0) ? 'long' : 'short';
-    } else {
-      timer.mode = 'focus';
-    }
+    } else { timer.mode = 'focus'; }
     timer.remaining = DURATIONS[timer.mode];
     updateTimerDisplay();
   }
   function tick(){
-    if(timer.remaining > 0){
-      timer.remaining--;
-      updateTimerDisplay();
-    } else {
-      advancePhase();
-    }
+    if(timer.remaining > 0){ timer.remaining--; updateTimerDisplay(); }
+    else { advancePhase(); }
   }
   function setupTimer(){
     updateTimerDisplay();
     document.getElementById('btnStartPause').addEventListener('click', ()=>{
       const btn = document.getElementById('btnStartPause');
       if(timer.running){
-        clearInterval(timer.intervalId);
-        timer.running = false;
-        btn.textContent = 'Reanudar';
+        clearInterval(timer.intervalId); timer.running = false; btn.textContent = 'Reanudar';
       } else {
-        timer.intervalId = setInterval(tick, 1000);
-        timer.running = true;
-        btn.textContent = 'Pausar';
+        timer.intervalId = setInterval(tick, 1000); timer.running = true; btn.textContent = 'Pausar';
       }
     });
     document.getElementById('btnReset').addEventListener('click', ()=>{
-      clearInterval(timer.intervalId);
-      timer.running = false;
+      clearInterval(timer.intervalId); timer.running = false;
       timer.remaining = DURATIONS[timer.mode];
       document.getElementById('btnStartPause').textContent = 'Iniciar';
       updateTimerDisplay();
     });
   }
 
-  async function init(){
-    await loadMode();
-    await loadItems();
-    await loadProgress();
+  function init(){
+    loadMode();
+    loadItems();
+    loadProgress();
     renderHeader();
     renderTimeline();
     setupTabs();

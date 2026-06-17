@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Metas diarias – Panel de control</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16212B; --panel:#1E2B36; --line:#32424F; --grid:rgba(143,160,172,.06);
+    --amber:#E8A33D; --teal:#5FB8A8; --clay:#C97B63; --sage:#8FBF7F;
+    --paper:#F2ECDF; --mute:#8FA0AC;
+    --font-display:'Manrope', system-ui, sans-serif;
+    --font-mono:'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:var(--font-display); background-color:var(--ink);
+    background-image:linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size:32px 32px; color:var(--paper); min-height:100vh; padding:32px 16px 60px;
+  }
+  .wrap{max-width:720px;margin:0 auto;}
+  .topnav{display:flex; gap:14px; margin-bottom:18px; font-family:var(--font-mono); font-size:.75rem; flex-wrap:wrap;}
+  .topnav a{color:var(--mute); text-decoration:none; border-bottom:1px solid transparent;}
+  .topnav a:hover{color:var(--paper); border-bottom-color:var(--amber);}
+  .topnav a.current{color:var(--amber);}
+
+  header{margin-bottom:26px;}
+  .eyebrow{font-family:var(--font-mono); font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--amber); margin-bottom:10px;}
+  h1{font-size:clamp(1.6rem,4.5vw,2.2rem); font-weight:800; margin:0 0 12px; letter-spacing:-.01em;}
+  .header-meta{display:flex; gap:16px; flex-wrap:wrap; font-family:var(--font-mono); font-size:.8rem; color:var(--mute);}
+  .header-meta .streak{color:var(--amber);}
+
+  .tabs{display:flex; gap:6px; margin-bottom:22px; border-bottom:1px solid var(--line);}
+  .tab{background:none; border:none; color:var(--mute); font-family:var(--font-mono); font-size:.74rem; letter-spacing:.06em; text-transform:uppercase; padding:10px 6px; cursor:pointer; border-bottom:2px solid transparent;}
+  .tab.active{color:var(--paper); border-bottom-color:var(--amber);}
+  .tab:hover{color:var(--paper);}
+  .tab:focus-visible, button:focus-visible{outline:2px solid var(--amber); outline-offset:2px;}
+
+  .panel{display:none;}
+  .panel.active{display:block;}
+
+  .day-nav{display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:8px;}
+  .nav-btn{background:var(--panel); border:1px solid var(--line); color:var(--paper); border-radius:8px; width:36px; height:36px; cursor:pointer; font-size:1rem; line-height:1;}
+  .nav-btn:hover{border-color:var(--amber);}
+  .day-label{font-family:var(--font-mono); font-size:.85rem; min-width:200px; text-align:center;}
+  .day-label .istoday{color:var(--amber);}
+  .back-today-wrap{text-align:center; margin-bottom:18px; min-height:18px;}
+  .back-today{background:none; border:none; color:var(--mute); font-family:var(--font-mono); font-size:.72rem; text-decoration:underline; cursor:pointer;}
+  .back-today:hover{color:var(--paper);}
+
+  .progress-summary{font-family:var(--font-mono); font-size:.85rem; color:var(--mute); text-align:center; margin-bottom:18px;}
+  #progressCount{color:var(--paper); font-weight:700;}
+
+  .goal-row{display:flex; align-items:center; justify-content:space-between; gap:14px; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:14px 16px; margin-bottom:10px;}
+  .goal-row.done{border-left:3px solid var(--teal); opacity:.8;}
+  .goal-label{font-size:.95rem; line-height:1.4;}
+  .goal-row.done .goal-label{color:var(--mute);}
+  .goal-check{display:flex; align-items:center; gap:7px; font-family:var(--font-mono); font-size:.7rem; color:var(--mute); cursor:pointer; flex-shrink:0;}
+  .goal-check input{accent-color:var(--teal); width:17px; height:17px; cursor:pointer;}
+
+  .month-nav{display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:18px;}
+  .month-label{font-family:var(--font-mono); font-weight:700; font-size:.9rem; min-width:170px; text-align:center;}
+
+  .cal-weekdays{display:grid; grid-template-columns:repeat(7,1fr); gap:6px; margin-bottom:8px; font-family:var(--font-mono); font-size:.68rem; color:var(--mute); text-align:center;}
+  .cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:6px;}
+  .cal-cell{aspect-ratio:1; border:1px solid var(--line); border-radius:8px; padding:6px; font-family:var(--font-mono); font-size:.72rem; color:var(--mute); cursor:pointer; background:var(--panel); display:flex; align-items:flex-start;}
+  .cal-cell:hover{border-color:var(--amber);}
+  .cal-cell.empty{visibility:hidden; cursor:default;}
+  .cal-cell.today{border-color:var(--amber); border-width:2px;}
+
+  .legend{display:flex; align-items:center; gap:8px; margin-top:20px; font-family:var(--font-mono); font-size:.7rem; color:var(--mute); flex-wrap:wrap; justify-content:center;}
+  .legend-scale{display:flex; gap:3px;}
+  .legend-swatch{width:16px; height:16px; border-radius:4px; border:1px solid var(--line);}
+
+  footer{margin-top:34px; font-size:.78rem; color:var(--mute); text-align:center; line-height:1.6;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="topnav">
+    <a href="index.html">Inicio</a>
+    <a href="rutina-diaria.html">Rutina · ES</a>
+    <a href="rutina-diaria-zh.html">日程 · 中文</a>
+    <a href="metas.html" class="current">Metas diarias</a>
+  </nav>
+
+  <header>
+    <div class="eyebrow">Panel de control · tus metas</div>
+    <h1>Metas diarias</h1>
+    <div class="header-meta">
+      <span id="todayLabel"></span>
+      <span class="streak" id="streakBadge">Racha: 0 días</span>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="hoy">Hoy</button>
+    <button class="tab" data-tab="calendario">Calendario</button>
+  </nav>
+
+  <section class="panel active" id="panel-hoy">
+    <div class="day-nav">
+      <button class="nav-btn" id="btnPrevDay">‹</button>
+      <span class="day-label" id="dayLabel"></span>
+      <button class="nav-btn" id="btnNextDay">›</button>
+    </div>
+    <div class="back-today-wrap">
+      <button class="back-today" id="btnBackToday" style="display:none;">Volver a hoy</button>
+    </div>
+    <div class="progress-summary"><span id="progressCount">0/0</span> metas cumplidas</div>
+    <div id="goalsList"></div>
+  </section>
+
+  <section class="panel" id="panel-calendario">
+    <div class="month-nav">
+      <button class="nav-btn" id="btnPrevMonth">‹</button>
+      <span class="month-label" id="monthLabel"></span>
+      <button class="nav-btn" id="btnNextMonth">›</button>
+    </div>
+    <div class="cal-weekdays">
+      <span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+    <div class="legend">
+      <span>Menos</span>
+      <span class="legend-scale">
+        <span class="legend-swatch" style="background:rgba(95,184,168,.12)"></span>
+        <span class="legend-swatch" style="background:rgba(95,184,168,.35)"></span>
+        <span class="legend-swatch" style="background:rgba(95,184,168,.58)"></span>
+        <span class="legend-swatch" style="background:rgba(95,184,168,.85)"></span>
+      </span>
+      <span>Más cumplido</span>
+    </div>
+  </section>
+
+  <footer>Marca cada meta del día. Si algo no se cumple, simplemente queda sin marcar: no hay penalización, solo registro. Toca cualquier día del calendario para revisarlo o editarlo. Todo se guarda automáticamente en este navegador.</footer>
+</div>
+
+<script>
+  const STORAGE_KEY = 'goals-log';
+  const GOALS = [
+    {id:'sleep',   label:'Dormir al menos 7 horas'},
+    {id:'water',   label:'Beber 2 litros de agua'},
+    {id:'tea',     label:'Té verde caliente en el desayuno'},
+    {id:'va',      label:'Enviar 3 propuestas de voice acting'},
+    {id:'job',     label:'Aplicar a un trabajo'},
+    {id:'vlog',    label:'Grabar un vlog en chino'},
+    {id:'journal', label:'Escribir en el diario'},
+    {id:'read',    label:'Leer al menos 30 minutos'},
+    {id:'mood',    label:'Tener un buen estado de ánimo'}
+  ];
+
+  let log = {};
+  let viewDate = new Date();
+  let calendarMonth = new Date();
+  calendarMonth = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth(), 1);
+
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function dateKey(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+  function todayKey(){ return dateKey(new Date()); }
+  function escapeHtml(str){ return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  function loadLog(){
+    try{
+      const v = localStorage.getItem(STORAGE_KEY);
+      log = v ? JSON.parse(v) : {};
+    }catch(e){ log = {}; }
+  }
+  function saveLog(){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(log)); }
+    catch(e){ console.error('No se pudo guardar el registro de metas', e); }
+  }
+
+  function ratioFor(key){
+    const day = log[key];
+    if(!day) return null;
+    const done = GOALS.filter(g=>day[g.id]).length;
+    return done / GOALS.length;
+  }
+
+  function computeStreak(){
+    let count = 0;
+    let d = new Date();
+    let first = true;
+    while(true){
+      const key = dateKey(d);
+      const r = ratioFor(key);
+      if(r !== null){
+        if(r >= 0.7){ count++; d.setDate(d.getDate()-1); first = false; continue; }
+        else break;
+      } else {
+        if(first){ d.setDate(d.getDate()-1); first = false; continue; }
+        else break;
+      }
+    }
+    return count;
+  }
+
+  function renderHeader(){
+    const today = new Date();
+    const label = today.toLocaleDateString('es-MX', {weekday:'long', day:'numeric', month:'long'});
+    document.getElementById('todayLabel').textContent = label.charAt(0).toUpperCase() + label.slice(1);
+    document.getElementById('streakBadge').textContent = 'Racha: ' + computeStreak() + ' días';
+  }
+
+  function renderHoy(){
+    const key = dateKey(viewDate);
+    const isToday = key === todayKey();
+    const label = viewDate.toLocaleDateString('es-MX', {weekday:'long', day:'numeric', month:'long'});
+    const labelCap = label.charAt(0).toUpperCase() + label.slice(1);
+    document.getElementById('dayLabel').innerHTML = labelCap + (isToday ? ' <span class="istoday">(hoy)</span>' : '');
+    document.getElementById('btnBackToday').style.display = isToday ? 'none' : 'inline';
+
+    const dayData = log[key] || {};
+    const list = document.getElementById('goalsList');
+    list.innerHTML = '';
+    GOALS.forEach(g=>{
+      const checked = !!dayData[g.id];
+      const row = document.createElement('div');
+      row.className = 'goal-row' + (checked ? ' done' : '');
+      row.innerHTML =
+        '<span class="goal-label">' + escapeHtml(g.label) + '</span>' +
+        '<label class="goal-check"><input type="checkbox" data-id="' + g.id + '" ' + (checked ? 'checked' : '') + '><span>Cumplido</span></label>';
+      list.appendChild(row);
+    });
+    list.querySelectorAll('input[type=checkbox]').forEach(el=>{
+      el.addEventListener('change', e=>{
+        const id = e.target.dataset.id;
+        if(!log[key]) log[key] = {};
+        log[key][id] = e.target.checked;
+        saveLog();
+        renderHoy();
+        renderHeader();
+      });
+    });
+
+    const doneCount = GOALS.filter(g=>dayData[g.id]).length;
+    document.getElementById('progressCount').textContent = doneCount + '/' + GOALS.length;
+  }
+
+  function renderCalendar(){
+    const year = calendarMonth.getFullYear();
+    const month = calendarMonth.getMonth();
+    const monthLabel = calendarMonth.toLocaleDateString('es-MX', {month:'long', year:'numeric'});
+    document.getElementById('monthLabel').textContent = monthLabel.charAt(0).toUpperCase() + monthLabel.slice(1);
+
+    const firstWeekday = new Date(year, month, 1).getDay();
+    const leadingBlanks = (firstWeekday + 6) % 7;
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    const grid = document.getElementById('calGrid');
+    grid.innerHTML = '';
+    for(let i=0; i<leadingBlanks; i++){
+      const blank = document.createElement('div');
+      blank.className = 'cal-cell empty';
+      grid.appendChild(blank);
+    }
+    for(let day=1; day<=daysInMonth; day++){
+      const cellDate = new Date(year, month, day);
+      const key = dateKey(cellDate);
+      const r = ratioFor(key);
+      const cell = document.createElement('div');
+      cell.className = 'cal-cell' + (key === todayKey() ? ' today' : '');
+      cell.textContent = day;
+      cell.style.background = (r === null) ? 'var(--panel)' : 'rgba(95,184,168,' + (0.12 + r*0.73).toFixed(2) + ')';
+      cell.title = (r === null) ? 'Sin registro' : Math.round(r*GOALS.length) + '/' + GOALS.length + ' cumplidas';
+      cell.addEventListener('click', ()=>{
+        viewDate = cellDate;
+        renderHoy();
+        document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+        document.querySelector('.tab[data-tab="hoy"]').classList.add('active');
+        document.getElementById('panel-hoy').classList.add('active');
+      });
+      grid.appendChild(cell);
+    }
+  }
+
+  function setupTabs(){
+    document.querySelectorAll('.tab').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+        if(btn.dataset.tab === 'calendario') renderCalendar();
+        else renderHoy();
+      });
+    });
+  }
+
+  function setupDayNav(){
+    document.getElementById('btnPrevDay').addEventListener('click', ()=>{
+      viewDate.setDate(viewDate.getDate()-1);
+      renderHoy();
+    });
+    document.getElementById('btnNextDay').addEventListener('click', ()=>{
+      viewDate.setDate(viewDate.getDate()+1);
+      renderHoy();
+    });
+    document.getElementById('btnBackToday').addEventListener('click', ()=>{
+      viewDate = new Date();
+      renderHoy();
+    });
+  }
+
+  function setupMonthNav(){
+    document.getElementById('btnPrevMonth').addEventListener('click', ()=>{
+      calendarMonth = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth()-1, 1);
+      renderCalendar();
+    });
+    document.getElementById('btnNextMonth').addEventListener('click', ()=>{
+      calendarMonth = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth()+1, 1);
+      renderCalendar();
+    });
+  }
+
+  function init(){
+    loadLog();
+    renderHeader();
+    renderHoy();
+    renderCalendar();
+    setupTabs();
+    setupDayNav();
+    setupMonthNav();
+  }
+  init();
+</script>
+</body>
+</html>
